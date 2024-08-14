@@ -17,12 +17,12 @@ jobs:
         run: cargo build --release --verbose
       - name: Zip Windows Artifact
         run: |
-          Compress-Archive -Path .\target\release\zhttpd.exe -DestinationPath .\windows-x64.zip
+          Compress-Archive -Path .\target\release\zhttpd.exe -DestinationPath .\windows-x64-bin.zip
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-x64
-          path: windows-x64.zip
+          path: windows-x64-bin.zip
 
   build-linux:
     runs-on: ubuntu-latest
@@ -32,12 +32,12 @@ jobs:
         run: cargo build --release --verbose
       - name: Zip Linux Artifact
         run: |
-          zip linux-x64.zip ./target/release/zhttpd
+          zip linux-x64-bin.zip ./target/release/zhttpd
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64
-          path: linux-x64.zip
+          path: linux-x64-bin.zip
 
   draft-release:
     needs: [build-windows, build-linux]
@@ -58,5 +58,5 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            artifacts/windows-x64/windows-x64.zip
-            artifacts/linux-x64/linux-x64.zip
+            artifacts/windows-x64/windows-x64-bin.zip
+            artifacts/linux-x64/linux-x64-bin.zip
