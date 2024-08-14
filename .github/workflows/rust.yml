@@ -3,6 +3,7 @@ name: zhttpd
 on:
   push:
     tags: [v\d+\.\d+\.\d+]
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
