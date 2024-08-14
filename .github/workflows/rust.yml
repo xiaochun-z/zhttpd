@@ -17,9 +17,11 @@ jobs:
           - os: windows-latest
             artifact_name: windows-x64
             bin_name: zhttpd.exe
+            upx_args: -9 -v
           - os: ubuntu-latest
             artifact_name: linux-x64
             bin_name: zhttpd
+            upx_args: -9 -v
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +34,12 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build Release
         run: cargo build --release --verbose
+      - name: Install UPX
+        uses: crazy-max/ghaction-upx@v3
+        with:
+          install-only: true
+      - name: Compress binary with UPX
+        run: upx ${{ matrix.upx_args }} ./target/release/${{ matrix.bin_name }}
       - name: Zip Artifact (Windows)
         if: matrix.os == 'windows-latest'
         run: |
