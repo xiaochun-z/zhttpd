@@ -19,7 +19,7 @@ jobs:
         run: |
           Compress-Archive -Path .\target\release\zhttpd.exe -DestinationPath .\windows-x64.zip
       - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-x64
           path: windows-x64.zip
@@ -34,7 +34,7 @@ jobs:
         run: |
           zip linux-x64.zip ./target/release/zhttpd
       - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-x64
           path: linux-x64.zip
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
       - name: Create Release
