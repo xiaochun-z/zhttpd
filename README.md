@@ -9,7 +9,7 @@ directory tree:
 ├─   zhttpd.exe
 │
 └─── public_html        <------put your HTML resources to this folder
-       │─ ─   index.html
+       │──   index.html
        │──    other files
        └───   other sub-folders
 ```
