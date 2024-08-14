@@ -12,5 +12,5 @@ directory tree:
 ├─   zhttpd.exe
 │
 └─── assets
-       │   index.html
+       │   index.html <------put your HTML resources to this folder
 ```
