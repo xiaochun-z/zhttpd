@@ -1,0 +1,11 @@
+[package]
+name = "zhttpd"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+open = { version = "5.3.0", features = ["shellexecute-on-windows"] }
+tokio = { version = "1.39.2", features = ["full"] }
+warp = "0.3.7"
