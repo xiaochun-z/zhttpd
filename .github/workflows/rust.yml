@@ -39,12 +39,11 @@ jobs:
       - name: Zip Artifact (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          cd target/release
-          zip -j ${{ matrix.artifact_name }}-bin.zip ${{ matrix.bin_name }}
+          zip -j ${{ matrix.artifact_name }}-bin.zip ./target/release/${{ matrix.bin_name }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}
+          name: ${{ matrix.artifact_name }}-bin
           path: ${{ matrix.artifact_name }}-bin.zip
 
   draft-release:
@@ -55,6 +54,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+      - name: List artifacts
+        run: ls -R artifacts
       - name: Create Release
         uses: softprops/action-gh-release@v1
         env:
@@ -65,5 +66,5 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            artifacts/windows-x64/windows-x64-bin.zip
-            artifacts/linux-x64/linux-x64-bin.zip
+            artifacts/windows-x64-bin/windows-x64-bin.zip
+            artifacts/linux-x64-bin/linux-x64-bin.zip
