@@ -1,7 +1,6 @@
 # zhttpd
-a light http server without any configuration, suitable for doing testing locally.
+a simple http server without any configuration, suitable for doing testing locally.
 
-launch zhttpd, put html files to 'public_html' folder.
 put your html/css/js file to public_html folder.
 
 directory tree:
@@ -14,3 +13,4 @@ directory tree:
        │──    other files
        └───   other sub-folders
 ```
+launch zhttpd and done.
