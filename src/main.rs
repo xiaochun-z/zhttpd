@@ -24,7 +24,8 @@ async fn main() {
         port
     );
 
-    if cfg!(target_os = "windows") {
+    #[cfg(any(target_os = "windows"))] //, target_os = "macos"
+    {
         // Open browser
         open::that(format!("http://localhost:{}", port)).unwrap();
     }
