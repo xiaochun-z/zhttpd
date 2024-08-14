@@ -8,10 +8,9 @@ put your html/css/js file to assests folder.
 
 directory tree:
 
+```text
 ├─   zhttpd.exe
-
 │
-
 └─── assets
-
        │   index.html
+```
