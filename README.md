@@ -11,6 +11,6 @@ directory tree:
 │
 └─── public_html        <------put your HTML resources to this folder
        │─ ─   index.html
-       │──    *.css
-       └───   *.js
+       │──    other files
+       └───   other sub-folders
 ```
