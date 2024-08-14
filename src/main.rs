@@ -2,8 +2,8 @@ use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() {
-    // Serve files from the assets directory
-    let www_root = "./assets";
+    // Serve files from the directory
+    let www_root = "./public_html";
     let routes = warp::fs::dir(www_root);
 
     // Try to bind to port 8000
