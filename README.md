@@ -9,6 +9,6 @@ directory tree:
 ```text
 ├─   zhttpd.exe
 │
-└─── public_html
-       │   index.html <------put your HTML resources to this folder
+└─── public_html        <------put your HTML resources to this folder
+       │   index.html
 ```
