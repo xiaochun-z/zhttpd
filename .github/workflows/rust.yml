@@ -1,0 +1,55 @@
+name: zhttpd
+
+on:
+  push:
+    tags: [v\d+\.\d+\.\d+]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Release
+        run: cargo build --release --verbose
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: zhttpd-windows
+          path: target/release/zhttpd.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Release
+        run: cargo build --release --verbose
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: zhttpd-linux
+          path: target/release/zhttpd
+
+  draft-release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: false
+          files: |
+            artifacts/zhttpd-windows
+            artifacts/zhttpd-linux
