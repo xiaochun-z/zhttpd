@@ -1,10 +1,10 @@
-use get_if_addrs::{get_if_addrs, IfAddr};
 use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() {
     // Serve files from the assets directory
-    let routes = warp::fs::dir("./assets");
+    let www_root = "./assets";
+    let routes = warp::fs::dir(www_root);
 
     // Try to bind to port 8000
     let port = match TcpListener::bind("0.0.0.0:8000").await {
@@ -20,31 +20,15 @@ async fn main() {
         }
     };
 
-    let ip = get_if_addrs()
-        .unwrap()
-        .into_iter()
-        .find(|iface| {
-            !iface.is_loopback()
-                && match iface.addr {
-                    IfAddr::V4(ref _addr) => true,
-                    IfAddr::V6(_) => false,
-                }
-        })
-        .map(|iface| match iface.addr {
-            IfAddr::V4(ref addr) => addr.ip.to_string(),
-            IfAddr::V6(_) => unreachable!(), // We've already filtered for V4 above
-        })
-        .unwrap_or_else(|| "127.0.0.1".to_string());
-
     println!(
-        "Serving files from the current directory on http://{}:{}",
-        ip, port
+        "Serving '{0}' directory on http://localhost:{1}\nPut your HTML/CSS/JavaScript files to '{0}' folder, if you don't have this folder, you can create it by yourself.\n\nPress Ctrl+C to quit...",
+        www_root, port
     );
 
     #[cfg(any(target_os = "windows"))] //, target_os = "macos"
     {
         // Open browser
-        open::that(format!("http://{}:{}", ip, port)).unwrap();
+        open::that(format!("http://localhost:{}", port)).unwrap();
     }
 
     let server_addr = ([0, 0, 0, 0], port);
