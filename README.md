@@ -1,16 +1,14 @@
 # zhttpd
 a light http server without any configuration, suitable for doing testing locally.
 
-launch zhttpd, put html files to 'assets' folder.
-it will start browser automatically after you launched zhttpd.
-
-put your html/css/js file to assests folder.
+launch zhttpd, put html files to 'public_html' folder.
+put your html/css/js file to public_html folder.
 
 directory tree:
 
 ```text
 ├─   zhttpd.exe
 │
-└─── assets
+└─── public_html
        │   index.html <------put your HTML resources to this folder
 ```
