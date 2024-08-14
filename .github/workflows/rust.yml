@@ -2,45 +2,50 @@ name: zhttpd
 
 on:
   push:
-    tags: [v\d+\.\d+\.\d+]
+    tags: ['v*.*.*']
   workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            artifact_name: windows-x64
+            bin_name: zhttpd.exe
+          - os: ubuntu-latest
+            artifact_name: linux-x64
+            bin_name: zhttpd
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build Release
         run: cargo build --release --verbose
-      - name: Zip Windows Artifact
+      - name: Zip Artifact
+        shell: bash
         run: |
-          Compress-Archive -Path .\target\release\zhttpd.exe -DestinationPath .\windows-x64-bin.zip
-      - name: Upload Windows Artifact
+          cd target/release
+          zip -j ${{ matrix.artifact_name }}-bin.zip ${{ matrix.bin_name }}
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-x64
-          path: windows-x64-bin.zip
-
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build Release
-        run: cargo build --release --verbose
-      - name: Zip Linux Artifact
-        run: |
-          zip linux-x64-bin.zip ./target/release/zhttpd
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-x64
-          path: linux-x64-bin.zip
+          name: ${{ matrix.artifact_name }}
+          path: target/release/${{ matrix.artifact_name }}-bin.zip
 
   draft-release:
-    needs: [build-windows, build-linux]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
@@ -48,13 +53,12 @@ jobs:
         with:
           path: artifacts
       - name: Create Release
-        id: create_release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           draft: true
           prerelease: false
           files: |
