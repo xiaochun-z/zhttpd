@@ -43,7 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         www_root, port, www_root
     );
 
-    #[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
+    #[cfg(any(target_os = "windows", target_os = "macos"))]
     {
         if let Err(e) = open::that(format!("http://localhost:{}", port)) {
             eprintln!("Failed to open browser: {}", e);
